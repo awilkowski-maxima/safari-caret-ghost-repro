@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Safari: stale caret left behind in a ProseMirror editor</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px 24px 80px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #1a1a1a;
+        background: #fff;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 12px;
+      }
+      ol {
+        max-width: 640px;
+        padding-left: 20px;
+      }
+      .case {
+        max-width: 420px;
+        margin: 28px 0 0;
+      }
+      .label {
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .note {
+        color: #555;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .note code {
+        background: #eee;
+        padding: 1px 4px;
+        border-radius: 3px;
+      }
+      /* The short scroller is the required ingredient: the editor scrolls to
+         keep the caret visible, which holds it at a fixed screen position
+         across the edit. */
+      .scroller {
+        max-height: 100px;
+        overflow-y: auto;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      .ProseMirror {
+        outline: none;
+        font-size: 13px;
+        line-height: 20px;
+      }
+      .ProseMirror p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Safari: stale caret left behind in a ProseMirror editor</h1>
+
+    <ol>
+      <li>Click into the editor.</li>
+      <li>Put the caret at the <b>start of a line near the bottom</b>.</li>
+      <li>
+        Press <b>Shift+Enter</b> a few times. Deleting a line from the middle of
+        the content sometimes reproduces it too, less reliably than inserting.
+      </li>
+      <li>
+        A second caret stays painted at the caret's previous screen position,
+        frozen at whatever opacity the blink animation was at. Moving the caret
+        over it or typing erases it, so don't do either while looking.
+      </li>
+    </ol>
+
+    <div class="case">
+      <div class="note">
+        The box is short enough that ProseMirror scrolls the caret into view on
+        each edit, holding it at a fixed screen position.
+      </div>
+      <div class="scroller"><div id="editor"></div></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

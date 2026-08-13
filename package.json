@@ -1,0 +1,17 @@
+{
+  "name": "prosemirror-safari-caret-ghost-repro",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tiptap/core": "3.29.2",
+    "@tiptap/starter-kit": "3.29.2"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
