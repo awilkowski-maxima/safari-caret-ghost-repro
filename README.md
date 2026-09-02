@@ -49,7 +49,8 @@ All four are necessary; none alone is sufficient.
 3. **ProseMirror performs the edit.** Hand-written editors making the same DOM
    mutation with the same scroll do not reproduce it, including ones that
    replicate ProseMirror's trailing `<br>`, its `<p>` wrapper, and in-place
-   text-node patching.
+   text-node patching. Checked with the other three conditions verified on each
+   attempt, including confirming that the container actually scrolled.
 4. **The container scrolls so the caret ends at the same screen position.**
    With `overflow: visible`, where the caret visibly moves outside the box,
    there is no ghost. Setting `handleScrollToSelection: () => true`, which
