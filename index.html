@@ -65,15 +65,21 @@
 
     <ol>
       <li>Click into the editor.</li>
-      <li>Put the caret at the <b>start of a line near the bottom</b>.</li>
       <li>
-        Press <b>Shift+Enter</b> a few times. Deleting a line from the middle of
-        the content sometimes reproduces it too, less reliably than inserting.
+        Put the caret at the start of a line near the bottom. Not the
+        first line, which never reproduces it.
+      </li>
+      <li>
+        Press <b>Shift+Return</b> a few times. It has to be Shift+Return, which
+        inserts a hard break inside the paragraph. Plain Return splits the
+        paragraph into a new block and does not reproduce it. Deleting lines can
+        also produce the ghost, when the delete happens to scroll the box, but
+        it is less reliable than inserting.
       </li>
       <li>
         A second caret stays painted at the caret's previous screen position,
         frozen at whatever opacity the blink animation was at. Moving the caret
-        over it or typing erases it, so don't do either while looking.
+        over it or typing erases it.
       </li>
     </ol>
 
