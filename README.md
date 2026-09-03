@@ -10,8 +10,7 @@ to be at, and is erased only by moving the caret over it or typing.
 on macOS 26.3 (25D125)**. **Chrome is unaffected.**
 
 No editor framework is involved: this is plain prosemirror-view with the
-standard hard-break keybinding. It also reproduces through Tiptap, which is
-where it was originally found.
+standard hard-break keybinding. 
 
 We could not reproduce it without ProseMirror. Hand-written editors making the
 same DOM change with the same scroll stay clean, so the trigger may be specific
@@ -56,9 +55,7 @@ All four are necessary; none alone is sufficient.
    mutation with the same scroll do not reproduce it, including ones that
    replicate ProseMirror's trailing `<br>`, its `<p>` wrapper, and in-place
    text-node patching. Checked with the other three conditions verified on each
-   attempt, including confirming that the container actually scrolled. Plain
-   prosemirror-view and Tiptap both reproduce it, so nothing above ProseMirror
-   is required.
+   attempt, including confirming that the container actually scrolled. 
 4. **The container scrolls so the caret ends at the same screen position.**
    With `overflow: visible`, where the caret visibly moves outside the box,
    there is no ghost. Setting `handleScrollToSelection: () => true`, which
