@@ -5,11 +5,15 @@ second caret painted at the caret's previous screen position. It persists
 indefinitely, frozen at whatever opacity Safari's caret fade animation happened
 to be at, and is erased only by moving the caret over it or typing.
 
-**Confirmed on** `@tiptap/core@3.29.2`, `@tiptap/starter-kit@3.29.2`,
-`prosemirror-view@1.42.2`, in **Safari 26.3 on macOS 26.3 (25D125)**.
-**Chrome is unaffected.**
+**Confirmed on** `prosemirror-view@1.42.2` with `prosemirror-state@1.4.3`,
+`prosemirror-model@1.25.4`, `prosemirror-schema-basic@1.2.4`, in **Safari 26.3
+on macOS 26.3 (25D125)**. **Chrome is unaffected.**
 
-We could not reproduce this without ProseMirror. Hand-written editors making the
+No editor framework is involved: this is plain prosemirror-view with the
+standard hard-break keybinding. It also reproduces through Tiptap, which is
+where it was originally found.
+
+We could not reproduce it without ProseMirror. Hand-written editors making the
 same DOM change with the same scroll stay clean, so the trigger may be specific
 to how ProseMirror updates the DOM, and the minimal operation behind it is not
 yet known.
@@ -27,9 +31,11 @@ Open the printed URL in **Safari**.
 
 1. Click into the editor and put the caret at the start of a line near the
    bottom. Not the first line, which never reproduces it.
-2. Press **Shift+Return** a few times. Not plain Return, which splits the
-   paragraph into a new block and does not reproduce it. Deleting lines can
-   also produce the ghost when the delete scrolls the box, less reliably.
+2. Press **Shift+Return** a few times. It is bound to
+   `replaceSelectionWith(hard_break).scrollIntoView()`. Not plain Return, which
+   splits the paragraph into a new block and does not reproduce it. Deleting
+   lines can also produce the ghost when the delete scrolls the box, less
+   reliably.
 3. A second caret remains at the caret's previous screen position.
 
 The blink phase matters, so give it several attempts.
@@ -50,7 +56,9 @@ All four are necessary; none alone is sufficient.
    mutation with the same scroll do not reproduce it, including ones that
    replicate ProseMirror's trailing `<br>`, its `<p>` wrapper, and in-place
    text-node patching. Checked with the other three conditions verified on each
-   attempt, including confirming that the container actually scrolled.
+   attempt, including confirming that the container actually scrolled. Plain
+   prosemirror-view and Tiptap both reproduce it, so nothing above ProseMirror
+   is required.
 4. **The container scrolls so the caret ends at the same screen position.**
    With `overflow: visible`, where the caret visibly moves outside the box,
    there is no ghost. Setting `handleScrollToSelection: () => true`, which
@@ -64,7 +72,7 @@ Fixed-size and scrolling containers reproduce.
 
 ## Ruled out
 
-- **ProseMirror's stylesheet.** Reproduces with `injectCSS: false`.
+- **ProseMirror's stylesheet.** Reproduces with it loaded or omitted entirely.
 - **The DOM ProseMirror produces.** See condition 3 above.
 - **The scroll implementation.** Replacing ProseMirror's scroll with a manual
   `scrollTop` adjustment, synchronous or deferred a frame, still reproduces.
