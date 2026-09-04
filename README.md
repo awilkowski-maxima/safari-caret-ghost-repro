@@ -79,11 +79,21 @@ Fixed-size and scrolling containers reproduce.
 - **Forced repaints from JS.** Toggling opacity after the edit, both inside the
   transaction and on the next frame, still reproduces.
 
-## Why it looks like a WebKit bug
+## Why this is a browser bug
 
 Nothing in page CSS or in the editing code suppresses it, and Chrome renders the
 same DOM and the same scroll correctly. A caret frozen mid-fade is a paint that
 was never erased rather than anything the page can produce.
+
+ProseMirror's maintainer reproduced this and confirmed it from the library side:
+ProseMirror draws no cursor of its own, so every caret on screen is drawn by the
+browser, and **the DOM selection is exactly as expected while the ghost is
+visible**. The stale caret therefore does not correspond to any selection the
+page is holding. He also found the ghost could only be cleared by invasive means,
+temporarily setting the selection to be non-empty, allowing the browser to paint
+that change, then restoring it. So the invalidation path does exist; this
+particular transition just does not trigger it.
+
 [WebKit changeset 281136](https://trac.webkit.org/changeset/281136/webkit)
 describes this class of defect: when a block changes size during layout, WebKit
 can fail to invalidate the old content area, "potentially leaving painting
@@ -103,8 +113,9 @@ Unrelated to this bug: deleting near the top of the box can leave the caret
 scrolled out of view. That happens in Chrome as well, so it is editor behaviour
 rather than a rendering fault, and is not what this report is about.
 
-What remains unknown is which part of ProseMirror's update cycle is also
-required, given that hand-written equivalents stay clean. Candidates are its
-`DOMObserver` stop/start around DOM writes and its scroll-position save/restore
-during redraws.
+What remains unknown is why ProseMirror is required at all, given that
+hand-written editors making the same DOM change with the same scroll stay clean.
+The likeliest explanation, and the maintainer's own reading, is that the order or
+timing of ProseMirror's combined DOM and selection update puts Safari into a
+state that a straightforward edit of a normal editable element does not.
 
