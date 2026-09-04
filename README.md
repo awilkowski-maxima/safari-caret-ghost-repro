@@ -85,7 +85,8 @@ Nothing in page CSS or in the editing code suppresses it, and Chrome renders the
 same DOM and the same scroll correctly. A caret frozen mid-fade is a paint that
 was never erased rather than anything the page can produce.
 
-ProseMirror's maintainer reproduced this and confirmed it from the library side:
+ProseMirror's maintainer reproduced this and confirmed it from the library side
+([forum thread](https://discuss.prosemirror.net/t/ghost-cursor-on-safari/9074)):
 ProseMirror draws no cursor of its own, so every caret on screen is drawn by the
 browser, and **the DOM selection is exactly as expected while the ghost is
 visible**. The stale caret therefore does not correspond to any selection the
